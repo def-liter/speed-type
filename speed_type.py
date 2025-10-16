@@ -1,11 +1,8 @@
 import random
 import time
-from colorama import Fore, Style
+from colorama import Fore, Style, init
 
-from colorama import init
 init()
-
-o = 0
 
 easy = [
     "apple", "river", "mountain", "computer", "sunshine", "ocean", "forest", "book", "music", 
@@ -35,35 +32,37 @@ normal = [
     "the river is wide"
 ]
 
-mode = None
+def pick_mode():
+    while True:
+        try:
+            pick = int(input("choose a mode - easy (1), normal (2), or quit (0): "))
+            if pick == 1:
+                return easy
+            elif pick == 2:
+                return normal
+            elif pick == 0:
+                print("bye")
+                exit()
+            else:
+                print("please pick 1, 2, or 0.")
+        except ValueError:
+            print("invalid input. Please enter a number.")
 
-def pk_modes():
-    global mode, o
-    pick_modes = int(input("easy mode=1 normal mode=2: "))
-    if pick_modes == 1:
-        mode = easy
-        o += 1
-    elif pick_modes == 2:
-        mode = normal
-        o += 1
+
+while True:
+    mode = pick_mode()
+    word_pick = random.choice(mode)
+    
+    print(f"\ntype this: {Fore.YELLOW}{word_pick}{Style.RESET_ALL}")
+    
+    start_time = time.time()
+    user_input = input("your input: ")
+    end_time = time.time()
+    
+    elapsed = end_time - start_time
+
+    if user_input == word_pick:
+        print(f"{Fore.GREEN}correct{Style.RESET_ALL} you typed it in {Fore.BLUE}{elapsed:.2f}{Style.RESET_ALL} seconds.\n")
     else:
-        print("pick 1 2 or 3")
-        pk_modes()
-
-if o == 0:
-    pk_modes()
-
-word_pick = random.choice(mode)
-
-st = time.time()
-asd = input(f"input {word_pick}: ")
-et = time.time()
-elapsed = et - st
-
-if asd == word_pick:
-    print(f"you wrote {Fore.GREEN}{word_pick}{Style.RESET_ALL} in {Fore.BLUE}{elapsed:.2f}{Style.RESET_ALL} seconds")
-else:
-    print(f"you wrote the incorrect word in {Fore.RED}{elapsed:.2f}{Style.RESET_ALL} seconds")
-    print(f"you wrote {Fore.RED}{asd}{Style.RESET_ALL} instead of {Fore.RED}{word_pick}{Style.RESET_ALL} in {Fore.BLUE}{elapsed:.2f}{Style.RESET_ALL} seconds")
-
-pk_modes()
+        print(f"{Fore.RED}incorrect{Style.RESET_ALL} you typed '{Fore.RED}{user_input}{Style.RESET_ALL}' instead of '{Fore.GREEN}{word_pick}{Style.RESET_ALL}'.")
+        print(f"time taken: {Fore.BLUE}{elapsed:.2f}{Style.RESET_ALL} seconds.\n")
